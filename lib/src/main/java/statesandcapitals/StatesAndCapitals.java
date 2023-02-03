@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -66,28 +67,28 @@ public class StatesAndCapitals
         // Use limit()
 
         List<StateInfo> firstFiveStates = null;
-
+        firstFiveStates = states.stream().limit(5).collect(Collectors.toList());
         testResults.put("B1", StatesAndCapitalsCheck.basic1(firstFiveStates));
 
         // B2. Submit the last five states
         // Use skip()
 
         List<StateInfo> lastFiveStates = null;
-
+        lastFiveStates = states.stream().skip(states.size()-5).collect(Collectors.toList());
         testResults.put("B2", StatesAndCapitalsCheck.basic2(lastFiveStates));
 
         // B3. From 1-20, submit the first 5 numbers
         // Use limit()
 
         List<Integer> firstFiveNumbers = IntStream.range(1, 20).boxed().collect(toList());
-
+        firstFiveNumbers = firstFiveNumbers.stream().limit(5).collect(toList());
         testResults.put("B3", StatesAndCapitalsCheck.basic3(firstFiveNumbers));
 
         // B4. From 1-20, submit the last 5 numbers
         // Use skip()
 
         List<Integer> lastFiveNumbers = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20).collect(toList());
-
+        lastFiveNumbers = lastFiveNumbers.stream().skip(15).collect(toList());
         testResults.put("B4", StatesAndCapitalsCheck.basic4(lastFiveNumbers));
 
         // B5. Submit the total number of states
@@ -95,7 +96,7 @@ public class StatesAndCapitals
         // PS: Don't use states.size(). It's easier and IntelliJ will even warn you not to do things this way. But I want you to understand how to use count() (or counting()).
 
         Long statesNumber = null;
-
+        statesNumber = states.stream().count();
         testResults.put("B5", StatesAndCapitalsCheck.basic5(statesNumber));
 
         // ***** Intermediate (any / first / all / none matches) *****
@@ -105,7 +106,7 @@ public class StatesAndCapitals
         // Can use filter()
 
         StateInfo cardinalState = null;
-
+//        cardinalState = states.stream().filter(cs -> cs.getStateBird("cardinal")).findany.orElseThrow();
         testResults.put("I1", StatesAndCapitalsCheck.int1(cardinalState));
 
         // I2. Find if any state's lowest elevation is less than 0
@@ -206,7 +207,7 @@ public class StatesAndCapitals
 
         testResults.put("A25", StatesAndCapitalsCheck.adv25(numberOfDistinctStateBirds));
 
-        // ***** Advanced 3 (custom comparators) *****
+//         ***** Advanced 3 (custom comparators) *****
 
         // A31. Submit the max state elevation
         // Use max(), orElseThrow(), and map()
