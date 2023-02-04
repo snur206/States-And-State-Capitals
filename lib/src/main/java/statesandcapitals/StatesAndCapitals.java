@@ -106,28 +106,28 @@ public class StatesAndCapitals
         // Can use filter()
 
         StateInfo cardinalState = null;
-//        cardinalState = states.stream().filter(cs -> cs.getStateBird("cardinal")).findany.orElseThrow();
+        cardinalState = states.stream().filter(si -> si.getStateBird().equals("cardinal")).findAny().orElseThrow();
         testResults.put("I1", StatesAndCapitalsCheck.int1(cardinalState));
 
         // I2. Find if any state's lowest elevation is less than 0
         // Use anyMatch()
 
         Boolean isAnyStateLessThan0Elevation = null;
-
+        isAnyStateLessThan0Elevation = states.stream().anyMatch(si -> si.getLowestElevationInFeet() < 0);
         testResults.put("I2", StatesAndCapitalsCheck.int2(isAnyStateLessThan0Elevation));
 
         // I3. Find if any state's highest elevation is greater than 21000
         // Use anyMatch()
 
         Boolean isAnyStateGreaterThan21000Elevation = null;
-
+        isAnyStateGreaterThan21000Elevation = states.stream().anyMatch(si -> si.getHighestElevationInFeet() > 21000);
         testResults.put("I3", StatesAndCapitalsCheck.int3(isAnyStateGreaterThan21000Elevation));
 
         // I4. Find if all states have an anthem
         // Use allMatch()
 
         Boolean doAllStatesHaveAnAnthem = null;
-
+        doAllStatesHaveAnAnthem = states.stream().allMatch(si -> si.getStateAnthem() != null);
         testResults.put("I4", StatesAndCapitalsCheck.int4(doAllStatesHaveAnAnthem));
 
         // I5. Find if no state has a one-word motto
@@ -135,7 +135,7 @@ public class StatesAndCapitals
         // Can use String.split()
 
         Boolean doNoStatesHaveAOneWordMotto = null;
-
+        doNoStatesHaveAOneWordMotto = states.stream().noneMatch(si -> si.getStateMotto().split(" ").length == 1);
         testResults.put("I5", StatesAndCapitalsCheck.int5(doNoStatesHaveAOneWordMotto));
 
         // ***** Advanced 1 (aggregation) *****
@@ -144,7 +144,7 @@ public class StatesAndCapitals
         // Use collect(averagingDouble())
 
         Double averageYearlyPrecipitationAcrossStateCapitals = null;
-
+        averageYearlyPrecipitationAcrossStateCapitals = averageYearlyPrecipitationAcrossStateCapitals = states.stream().collect(averagingDouble(sc -> sc.getCapital().getAverageYearlyPrecipitationInInches()));
         testResults.put("A11", StatesAndCapitalsCheck.adv11(averageYearlyPrecipitationAcrossStateCapitals));
 
         // A12. Submit the total yearly precipitation across all state capitals
@@ -152,21 +152,21 @@ public class StatesAndCapitals
         // Or use mapToInt() and sum()
 
         Integer totalYearlyPrecipitationAcrossStateCapitals = null;
-
+        totalYearlyPrecipitationAcrossStateCapitals = states.stream().mapToInt(sc -> sc.getCapital().getAverageYearlyPrecipitationInInches()).sum();
         testResults.put("A12", StatesAndCapitalsCheck.adv12(totalYearlyPrecipitationAcrossStateCapitals));
 
         // A13. Submit how many states are in each time zone (or group of time zones)
         // Use collect(groupingBy()) and counting()
 
         Map<String, Long> numberOfStatesByTimeZone = null;
-
+        numberOfStatesByTimeZone = states.stream().collect(groupingBy(si -> si.getTimeZones().toString(), counting()));
         testResults.put("A13", StatesAndCapitalsCheck.adv13(numberOfStatesByTimeZone));
 
         // A14. Submit how many state capitals are in each time zone
         // Use collect(groupingBy()) and counting()
 
         Map<String, Long> numberOfStateCapitalsByTimeZone = null;
-
+        numberOfStateCapitalsByTimeZone = states.stream().collect(groupingBy(sc -> sc.getCapital().getTimeZone(), counting()));
         testResults.put("A14", StatesAndCapitalsCheck.adv14(numberOfStateCapitalsByTimeZone));
 
         // ***** Advanced 2 (requires map() + additional technique(s)) *****
@@ -175,28 +175,28 @@ public class StatesAndCapitals
         // Use sorted() and map()
 
         List<String> stateTreesSortedAscending = null;
-
+        stateTreesSortedAscending = states.stream().map(StateInfo::getStateTree).sorted().collect(toList());
         testResults.put("A21", StatesAndCapitalsCheck.adv21(stateTreesSortedAscending));
 
         // A22. Submit all state names, separated by "; "
         // Use collect(joining()) and map()
 
         String allStateNamesSemicolonDelimited = null;
-
+        allStateNamesSemicolonDelimited = states.stream().map(StateInfo::getStateName).collect(joining("; "));
         testResults.put("A22", StatesAndCapitalsCheck.adv22(allStateNamesSemicolonDelimited));
 
         // A23. Submit all distinct state birds
         // Use distinct() and map()
 
         List<String> allDistinctStateBirds = null;
-
+        allDistinctStateBirds = states.stream().map(StateInfo::getStateBird).distinct().collect(toList());
         testResults.put("A23", StatesAndCapitalsCheck.adv23(allDistinctStateBirds));
 
         // A24. Submit all distinct state birds, but with any kind of mockingbird removed
         // Use distinct(), map(), and filter()
 
         List<String> allDistinctStateBirdsMinusMockingbirds = null;
-
+        allDistinctStateBirdsMinusMockingbirds = states.stream().map(StateInfo::getStateBird).filter(stateBird -> !stateBird.contains("mockingbird")).distinct().collect(toList());
         testResults.put("A24", StatesAndCapitalsCheck.adv24(allDistinctStateBirdsMinusMockingbirds));
 
         // A25. Submit the number of distinct state birds
@@ -204,7 +204,7 @@ public class StatesAndCapitals
         // PS: Don't use count(). IntelliJ will warn you but I want you to see how counting() works.
 
         Long numberOfDistinctStateBirds = null;
-
+        numberOfDistinctStateBirds = states.stream().map(StateInfo::getStateBird).distinct().count();
         testResults.put("A25", StatesAndCapitalsCheck.adv25(numberOfDistinctStateBirds));
 
 //         ***** Advanced 3 (custom comparators) *****
